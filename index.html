@@ -1,0 +1,532 @@
+
+<h2 class="sr-only">Tanishq Travel Cost Dashboard — FY 2025-26 analysis with ₹8.35 crore in total spend, 8 views covering cost owners, routes, airlines, monthly trends, policy gaps, and recommendations</h2>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1E2761;--gold:#C9A84C;--navy-light:#2d3a8c;
+  --bg:var(--color-background-primary);--bg2:var(--color-background-secondary);--bg3:var(--color-background-tertiary);
+  --txt:var(--color-text-primary);--txt2:var(--color-text-secondary);--txt3:var(--color-text-tertiary);
+  --bdr:var(--color-border-tertiary);--bdr2:var(--color-border-secondary);
+  --r:var(--border-radius-md);--rl:var(--border-radius-lg);
+}
+body{font-family:var(--font-sans);color:var(--txt);background:transparent}
+.dash{padding:0 0 2rem}
+.topbar{display:flex;align-items:center;gap:12px;padding:1rem 0 0.75rem;border-bottom:0.5px solid var(--bdr);margin-bottom:1rem}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-mark{width:32px;height:32px;background:#1E2761;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#C9A84C;letter-spacing:0.5px;flex-shrink:0}
+.logo-text{font-size:14px;font-weight:500;color:var(--txt)}
+.logo-sub{font-size:11px;color:var(--txt2)}
+.badge{margin-left:auto;font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--color-border-success);color:var(--color-text-success);background:var(--color-background-success)}
+.tabs{display:flex;gap:2px;overflow-x:auto;border-bottom:0.5px solid var(--bdr);margin-bottom:1.25rem;padding-bottom:0;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:6px 14px;font-size:12px;color:var(--txt2);border:none;background:none;cursor:pointer;border-radius:var(--r) var(--r) 0 0;white-space:nowrap;border-bottom:2px solid transparent;transition:color .15s}
+.tab:hover{color:var(--txt)}
+.tab.active{color:#1E2761;border-bottom:2px solid #1E2761;font-weight:500}
+.view{display:none}.view.show{display:block}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.25rem}
+.metric{background:var(--bg2);border-radius:var(--r);padding:0.875rem 1rem}
+.metric-lbl{font-size:11px;color:var(--txt2);margin-bottom:4px}
+.metric-val{font-size:22px;font-weight:500;color:var(--txt);line-height:1}
+.metric-sub{font-size:11px;color:var(--txt3);margin-top:3px}
+.metric-val.red{color:#A32D2D}.metric-val.grn{color:#3B6D11}.metric-val.amb{color:#854F0B}
+.card{background:var(--bg);border:0.5px solid var(--bdr);border-radius:var(--rl);padding:1rem 1.25rem;margin-bottom:1rem}
+.card-title{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:0.75rem}
+.card-sub{font-size:11px;color:var(--txt2);font-weight:400;margin-left:6px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem}
+@media(max-width:600px){.two-col,.three-col{grid-template-columns:1fr}}
+.chart-wrap{position:relative;width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;font-size:11px;color:var(--txt2)}
+.legend span{display:flex;align-items:center;gap:4px}
+.legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.insight-row{display:flex;flex-direction:column;gap:8px;margin-top:0.75rem}
+.insight{display:flex;gap:10px;padding:8px 10px;border-radius:var(--r);border:0.5px solid var(--bdr);align-items:flex-start}
+.insight-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.insight-txt{font-size:12px;color:var(--txt2);line-height:1.5}
+.insight-txt strong{color:var(--txt);font-weight:500}
+.insight.warn{background:var(--color-background-warning);border-color:var(--color-border-warning)}
+.insight.ok{background:var(--color-background-success);border-color:var(--color-border-success)}
+.insight.info{background:var(--color-background-info);border-color:var(--color-border-info)}
+.insight.danger{background:var(--color-background-danger);border-color:var(--color-border-danger)}
+.tbl{width:100%;font-size:12px;border-collapse:collapse}
+.tbl th{text-align:left;padding:6px 8px;color:var(--txt2);font-weight:500;border-bottom:0.5px solid var(--bdr);font-size:11px}
+.tbl td{padding:7px 8px;border-bottom:0.5px solid var(--bdr);color:var(--txt)}
+.tbl tr:last-child td{border:none}
+.tbl tr:hover td{background:var(--bg2)}
+.bar-inline{display:flex;align-items:center;gap:8px}
+.bar-bg{flex:1;background:var(--bg3);border-radius:2px;height:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px;background:#1E2761}
+.bar-fill.gold{background:#C9A84C}.bar-fill.red{background:#E24B4A}.bar-fill.grn{background:#639922}
+.pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500}
+.pill.red{background:#FCEBEB;color:#A32D2D}.pill.grn{background:#EAF3DE;color:#3B6D11}.pill.amb{background:#FAEEDA;color:#854F0B}.pill.info{background:#E6F1FB;color:#185FA5}
+.progress-section{margin-bottom:1rem}
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px}
+.prog-label{width:140px;flex-shrink:0;color:var(--txt2)}
+.prog-bar{flex:1;background:var(--bg3);border-radius:3px;height:8px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;transition:width .3s}
+.prog-val{width:60px;text-align:right;font-weight:500;flex-shrink:0}
+.filter-row{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.filter-row select,.filter-row input{font-size:12px;padding:5px 8px;border-radius:var(--r);border:0.5px solid var(--bdr2);background:var(--bg);color:var(--txt)}
+.btn-outline{font-size:12px;padding:5px 12px;border-radius:var(--r);border:0.5px solid var(--bdr2);background:var(--bg);color:var(--txt);cursor:pointer}
+.btn-outline:hover{background:var(--bg2)}
+.btn-primary{font-size:12px;padding:5px 12px;border-radius:var(--r);border:none;background:#1E2761;color:#fff;cursor:pointer}
+.rec-card{padding:10px 14px;border-radius:var(--r);border:0.5px solid var(--bdr);margin-bottom:8px;display:flex;gap:12px;align-items:flex-start}
+.rec-num{width:24px;height:24px;border-radius:50%;background:#1E2761;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;margin-top:1px}
+.rec-body h4{font-size:13px;font-weight:500;margin-bottom:3px}
+.rec-body p{font-size:12px;color:var(--txt2);line-height:1.5}
+.saving-tag{font-size:11px;font-weight:500;color:#3B6D11;margin-top:4px}
+.section-hdr{font-size:12px;font-weight:500;color:var(--txt2);text-transform:uppercase;letter-spacing:0.5px;margin:1rem 0 0.5rem}
+.timeline{position:relative;padding-left:20px}
+.timeline::before{content:'';position:absolute;left:6px;top:4px;bottom:4px;width:1px;background:var(--bdr)}
+.tl-item{position:relative;margin-bottom:12px;padding-left:16px}
+.tl-dot{position:absolute;left:-14px;top:3px;width:8px;height:8px;border-radius:50%;background:#1E2761;border:2px solid var(--bg)}
+.tl-item h4{font-size:12px;font-weight:500}
+.tl-item p{font-size:11px;color:var(--txt2);line-height:1.4;margin-top:2px}
+.tl-item .when{font-size:10px;color:#C9A84C;font-weight:500;margin-bottom:2px}
+.gap-highlight{display:flex;gap:8px;padding:8px 12px;border-radius:var(--r);background:var(--bg2);align-items:center;margin-bottom:6px;font-size:12px}
+.gap-policy{flex:1;color:var(--txt2)}.gap-arrow{color:var(--txt3)}.gap-actual{flex:1;font-weight:500}.gap-impact{font-size:11px}
+</style>
+
+<div class="dash">
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-mark">TJ</div>
+      <div><div class="logo-text">Tanishq Jewellery — Travel Intelligence</div><div class="logo-sub">FY 2025-26 · MBA Finance Intern Project</div></div>
+    </div>
+    <span class="badge">Live Data</span>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" onclick="switchTab(0)">Overview</button>
+    <button class="tab" onclick="switchTab(1)">Cost Owners</button>
+    <button class="tab" onclick="switchTab(2)">Routes & Sectors</button>
+    <button class="tab" onclick="switchTab(3)">Airlines</button>
+    <button class="tab" onclick="switchTab(4)">Monthly Trend</button>
+    <button class="tab" onclick="switchTab(5)">Policy Gaps</button>
+    <button class="tab" onclick="switchTab(6)">Recommendations</button>
+    <button class="tab" onclick="switchTab(7)">Simulator</button>
+  </div>
+
+  <!-- VIEW 0: OVERVIEW -->
+  <div class="view show" id="v0">
+    <div class="metrics">
+      <div class="metric"><div class="metric-lbl">Total travel spend</div><div class="metric-val">₹8.35 Cr</div><div class="metric-sub">FY 2025-26</div></div>
+      <div class="metric"><div class="metric-lbl">Boarding & hotel</div><div class="metric-val">₹4.70 Cr</div><div class="metric-sub">56% of total</div></div>
+      <div class="metric"><div class="metric-lbl">Air tickets</div><div class="metric-val">₹3.65 Cr</div><div class="metric-sub">44% of total</div></div>
+      <div class="metric"><div class="metric-lbl">Avg ticket cost</div><div class="metric-val">₹7,856</div><div class="metric-sub">Per FCM booking</div></div>
+      <div class="metric"><div class="metric-lbl">Total FCM trips</div><div class="metric-val">5,260</div><div class="metric-sub">Apr 25 – Mar 26</div></div>
+      <div class="metric"><div class="metric-lbl">Unique travellers</div><div class="metric-val">688</div><div class="metric-sub">Across cost centres</div></div>
+      <div class="metric"><div class="metric-lbl">Est. savings potential</div><div class="metric-val grn">₹2.1–3.4 Cr</div><div class="metric-sub">25–40% of spend</div></div>
+      <div class="metric"><div class="metric-lbl">Cost owners</div><div class="metric-val">25</div><div class="metric-sub">Reporting managers</div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Spend composition</div>
+        <div class="legend">
+          <span><span class="legend-dot" style="background:#1E2761"></span>Boarding ₹4.70 Cr</span>
+          <span><span class="legend-dot" style="background:#C9A84C"></span>Tickets ₹3.65 Cr</span>
+        </div>
+        <div class="chart-wrap" style="height:200px"><canvas id="c0a" role="img" aria-label="Doughnut chart: boarding 56% and tickets 44% of total travel spend">Boarding 56%, Tickets 44%</canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Top 5 cost owners<span class="card-sub">₹ Cr total spend</span></div>
+        <div class="chart-wrap" style="height:220px"><canvas id="c0b" role="img" aria-label="Horizontal bar chart of top 5 cost owners by spend">Mr.Jayadeep Reddy 1.67, Mr.Arivazhagan 1.61, Mr.Panneerselvam 1.26, Mr.Selvarajan 0.80, Mr.Manimaran 0.41 crore</canvas></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Key findings at a glance</div>
+      <div class="insight-row">
+        <div class="insight danger"><i class="ti ti-alert-triangle insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>₹1.52 Cr in avoidable Air India premium</strong> — Air India used on routes IndiGo fully covers. On DEL-BLR alone, Air India averages ₹10,142 vs IndiGo's ₹7,397 per ticket.</div></div>
+        <div class="insight warn"><i class="ti ti-calendar-x insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>Late booking surcharges estimated ₹50–75 L/yr</strong> — Policy mandates 7-day advance booking. FCM data shows significant last-minute air bookings, inflating fares by 25–35%.</div></div>
+        <div class="insight warn"><i class="ti ti-building insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>Non-FCM hotel spend is a blind spot</strong> — A parallel Non-FCM dataset shows hotel/boarding spend outside the travel portal with no rate controls, no GST recovery.</div></div>
+        <div class="insight info"><i class="ti ti-users insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>BLR↔BOM: 866 one-way trips, ₹51 L spend</strong> — The single biggest route. Group booking coordination on just 20% of overlapping trips saves an estimated ₹7–10 L on this route alone.</div></div>
+        <div class="insight ok"><i class="ti ti-target insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>No new policy needed</strong> — All savings come from enforcing the existing Jan 2024 Domestic Travel Policy via portal controls and manager accountability.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 1: COST OWNERS -->
+  <div class="view" id="v1">
+    <div class="metrics">
+      <div class="metric"><div class="metric-lbl">Top spender</div><div class="metric-val" style="font-size:16px">Mr. Jayadeep Reddy</div><div class="metric-sub">₹1.67 Cr total</div></div>
+      <div class="metric"><div class="metric-lbl">Top 3 owners</div><div class="metric-val">54%</div><div class="metric-sub">Of all travel spend</div></div>
+      <div class="metric"><div class="metric-lbl">Boarding leaders</div><div class="metric-val" style="font-size:16px">Mr. Arivazhagan</div><div class="metric-sub">₹97.8 L boarding</div></div>
+      <div class="metric"><div class="metric-lbl">Highest boarding%</div><div class="metric-val amb">55%</div><div class="metric-sub">Avg across owners</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Cost owner spend breakdown — boarding vs tickets</div>
+      <div class="chart-wrap" style="height:520px"><canvas id="c1a" role="img" aria-label="Stacked horizontal bar of cost owner boarding and ticket spend">25 cost owners from highest to lowest total spend</canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Boarding-to-ticket ratio<span class="card-sub">High ratio = heavy hotel/food spend vs flights</span></div>
+      <div class="progress-section" id="ratio-section"></div>
+    </div>
+  </div>
+
+  <!-- VIEW 2: ROUTES -->
+  <div class="view" id="v2">
+    <div class="metrics">
+      <div class="metric"><div class="metric-lbl">Top route</div><div class="metric-val" style="font-size:18px">BLR→BOM</div><div class="metric-sub">441 one-way trips</div></div>
+      <div class="metric"><div class="metric-lbl">BLR↔BOM total</div><div class="metric-val">866 trips</div><div class="metric-sub">₹51 L approx</div></div>
+      <div class="metric"><div class="metric-lbl">Distinct sectors</div><div class="metric-val">120+</div><div class="metric-sub">Across FCM data</div></div>
+      <div class="metric"><div class="metric-lbl">Top 5 routes share</div><div class="metric-val">41%</div><div class="metric-sub">Of all FCM trips</div></div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Top 15 sectors by trip count</div>
+        <div class="chart-wrap" style="height:420px"><canvas id="c2a" role="img" aria-label="Horizontal bar chart of top 15 travel sectors by number of trips">BLR-BOM 441 trips is highest</canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Route avg ticket cost comparison</div>
+        <div class="chart-wrap" style="height:420px"><canvas id="c2b" role="img" aria-label="Bar chart comparing average ticket cost by top routes">Route cost comparison</canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Route-wise airline mix on top routes</div>
+      <table class="tbl">
+        <thead><tr><th>Route</th><th>Trips</th><th>IndiGo avg</th><th>Air India avg</th><th>Premium paid</th><th>AI trip count</th><th>Savings if switched</th></tr></thead>
+        <tbody id="route-tbl"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- VIEW 3: AIRLINES -->
+  <div class="view" id="v3">
+    <div class="metrics">
+      <div class="metric"><div class="metric-lbl">IndiGo share</div><div class="metric-val grn">59%</div><div class="metric-sub">3,086 trips</div></div>
+      <div class="metric"><div class="metric-lbl">Air India share</div><div class="metric-val red">23%</div><div class="metric-sub">1,198 trips</div></div>
+      <div class="metric"><div class="metric-lbl">AI Exp / Akasa</div><div class="metric-val">12%</div><div class="metric-sub">Budget alternatives</div></div>
+      <div class="metric"><div class="metric-lbl">SpiceJet / others</div><div class="metric-val amb">6%</div><div class="metric-sub">Includes anomalies</div></div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Airline mix by trips</div>
+        <div class="legend">
+          <span><span class="legend-dot" style="background:#1E2761"></span>IndiGo 59%</span>
+          <span><span class="legend-dot" style="background:#C9A84C"></span>Air India 23%</span>
+          <span><span class="legend-dot" style="background:#639922"></span>AI Express 9%</span>
+          <span><span class="legend-dot" style="background:#BA7517"></span>Akasa 5%</span>
+          <span><span class="legend-dot" style="background:#888780"></span>Others 4%</span>
+        </div>
+        <div class="chart-wrap" style="height:220px"><canvas id="c3a" role="img" aria-label="Pie chart of airline share by trip count">IndiGo 59%, Air India 23%, AI Express 9%, Akasa 5%, Others 4%</canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Avg ticket price by airline</div>
+        <div class="chart-wrap" style="height:250px"><canvas id="c3b" role="img" aria-label="Bar chart of average ticket price by airline">Average ticket cost per airline</canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Air India premium analysis — cost of not switching</div>
+      <div class="insight-row">
+        <div class="insight danger"><i class="ti ti-currency-rupee insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>DEL-BLR route:</strong> Air India avg ₹10,142 vs IndiGo ₹7,397 — premium of <strong>₹2,745/ticket</strong>. With 55 Air India trips, excess spend = ₹1.51 L on this route alone.</div></div>
+        <div class="insight danger"><i class="ti ti-currency-rupee insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>BLR-DEL route:</strong> Air India avg ₹8,424 vs IndiGo ₹7,588 — premium of <strong>₹836/ticket</strong>. With 91 Air India trips, excess = ₹76K.</div></div>
+        <div class="insight warn"><i class="ti ti-currency-rupee insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>SpiceJet anomaly:</strong> BOM-BLR SpiceJet avg ₹20,940 — nearly 3× IndiGo rate. 13 trips = <strong>₹1.97 L excess</strong>. Likely includes excess charges or last-minute fares.</div></div>
+        <div class="insight ok"><i class="ti ti-check insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>BLR-BOM:</strong> Surprisingly, Air India (₹6,730) is cheaper than IndiGo (₹6,277) by only ₹453 — the smallest premium, meaning this route is not where to focus airline switch efforts.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 4: MONTHLY TREND -->
+  <div class="view" id="v4">
+    <div class="metrics">
+      <div class="metric"><div class="metric-lbl">Peak month</div><div class="metric-val" style="font-size:16px">Dec 2025</div><div class="metric-sub">₹64.4 L tickets</div></div>
+      <div class="metric"><div class="metric-lbl">Lowest month</div><div class="metric-val" style="font-size:16px">Mar 2025</div><div class="metric-sub">₹4.1 L (partial)</div></div>
+      <div class="metric"><div class="metric-lbl">Q3 Oct–Dec spike</div><div class="metric-val red">+47%</div><div class="metric-sub">vs Q1 Apr–Jun avg</div></div>
+      <div class="metric"><div class="metric-lbl">Month-on-month σ</div><div class="metric-val amb">₹14 L</div><div class="metric-sub">High volatility</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Monthly air ticket spend — FCM data (Apr 2025 – Mar 2026)</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="c4a" role="img" aria-label="Line chart of monthly air ticket spend from April 2025 to March 2026">Monthly spend trend showing December 2025 peak at 64.4 lakhs</canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Quarterly breakdown</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="c4b" role="img" aria-label="Bar chart of quarterly ticket spend">Q1 Q2 Q3 Q4 quarterly spend</canvas></div>
+    </div>
+    <div class="insight-row">
+      <div class="insight warn"><i class="ti ti-calendar insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>Oct–Dec is the highest spend quarter</strong> (festive season + store events). Pre-booking tickets for this period by September can save 25–35% — policy advance booking rule must be enforced strictly in Q3.</div></div>
+      <div class="insight info"><i class="ti ti-trending-down insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>Aug 2025 dip (₹19.2 L)</strong> — Naturally lighter travel month. A good benchmark for what spend could look like with better planning discipline throughout the year.</div></div>
+    </div>
+  </div>
+
+  <!-- VIEW 5: POLICY GAPS -->
+  <div class="view" id="v5">
+    <div class="metrics">
+      <div class="metric"><div class="metric-lbl">Policy version</div><div class="metric-val" style="font-size:15px">Jan 2024</div><div class="metric-sub">Current & in force</div></div>
+      <div class="metric"><div class="metric-lbl">Gaps identified</div><div class="metric-val red">5</div><div class="metric-sub">From data analysis</div></div>
+      <div class="metric"><div class="metric-lbl">Combined impact</div><div class="metric-val red">₹1.8–2.5 Cr</div><div class="metric-sub">Annual excess spend</div></div>
+      <div class="metric"><div class="metric-lbl">Fix complexity</div><div class="metric-val grn">Low</div><div class="metric-sub">Portal config only</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Policy vs reality — gap analysis</div>
+      <div style="margin-bottom:0.75rem">
+        <div class="gap-highlight"><div class="gap-policy"><span style="font-size:10px;color:var(--txt3)">POLICY SAYS</span><br>Book 7+ days in advance</div><div class="gap-arrow">→</div><div class="gap-actual">Last-minute bookings widespread in FCM data</div><div class="pill red">₹50–75L impact</div></div>
+        <div class="gap-highlight"><div class="gap-policy"><span style="font-size:10px;color:var(--txt3)">POLICY SAYS</span><br>Use lowest-cost airline</div><div class="gap-arrow">→</div><div class="gap-actual">Air India used on IndiGo-covered routes</div><div class="pill red">₹50–80L impact</div></div>
+        <div class="gap-highlight"><div class="gap-policy"><span style="font-size:10px;color:var(--txt3)">POLICY SAYS</span><br>All hotels via travel portal</div><div class="gap-arrow">→</div><div class="gap-actual">Large non-FCM hotel dataset with no rate caps</div><div class="pill red">₹40–60L impact</div></div>
+        <div class="gap-highlight"><div class="gap-policy"><span style="font-size:10px;color:var(--txt3)">POLICY SAYS</span><br>Group 9+ via Central Desk</div><div class="gap-arrow">→</div><div class="gap-actual">Parallel individual bookings on BLR-BOM same dates</div><div class="pill amb">₹20–35L impact</div></div>
+        <div class="gap-highlight"><div class="gap-policy"><span style="font-size:10px;color:var(--txt3)">POLICY SAYS</span><br>Travel only when virtual won't work</div><div class="gap-arrow">→</div><div class="gap-actual">Repeat visits same city within 30 days</div><div class="pill amb">₹15–30L impact</div></div>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Impact by category</div>
+        <div class="chart-wrap" style="height:200px"><canvas id="c5a" role="img" aria-label="Bar chart of estimated impact of each policy gap in lakhs">Policy gap financial impact</canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Town classification compliance</div>
+        <div class="insight-row">
+          <div class="insight info"><i class="ti ti-map-pin insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>Tourist town risk:</strong> Udaipur, Jaipur, Goa, Shimla classified as tourist towns. Policy allows 15% surcharge during peak season only with DM+ approval. Evidence of regular travel to these destinations — approval trail must be audited.</div></div>
+          <div class="insight warn"><i class="ti ti-building insight-icon" aria-hidden="true"></i><div class="insight-txt"><strong>A+ city limits:</strong> Mumbai & Delhi room cap is ₹10,500 for L8-L9. Non-portal hotel claims in these cities cannot be verified against limits — potential for systematic over-claim.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 6: RECOMMENDATIONS -->
+  <div class="view" id="v6">
+    <div class="metrics">
+      <div class="metric"><div class="metric-lbl">Quick wins (1–2 mo)</div><div class="metric-val grn">₹1.4 Cr</div><div class="metric-sub">4 initiatives</div></div>
+      <div class="metric"><div class="metric-lbl">Medium-term (3–6 mo)</div><div class="metric-val grn">₹85–130 L</div><div class="metric-sub">4 initiatives</div></div>
+      <div class="metric"><div class="metric-lbl">Total potential</div><div class="metric-val grn">₹2.1–3.4 Cr</div><div class="metric-sub">25–40% reduction</div></div>
+      <div class="metric"><div class="metric-lbl">Headcount needed</div><div class="metric-val">0</div><div class="metric-sub">Portal config only</div></div>
+    </div>
+
+    <div class="section-hdr">Phase 1 — Quick wins (months 1–2)</div>
+    <div class="rec-card"><div class="rec-num">1</div><div class="rec-body"><h4>Enforce advance booking via portal block</h4><p>Configure the travel portal to block air ticket approvals booked less than 5 days before travel. All exceptions require DM+ written override. Policy already mandates 7-day advance — this just adds a system enforcement layer.</p><div class="saving-tag">Est. savings: ₹50–75 L/yr · Complexity: Low</div></div></div>
+    <div class="rec-card"><div class="rec-num">2</div><div class="rec-body"><h4>IndiGo-first carrier rule with premium alert</h4><p>Portal shows lowest-cost option first. If employee selects Air India where IndiGo operates the same route, a pop-up appears requiring manager justification. Focus: DEL-BLR, BLR-DEL where AI premium is ₹836–2,745/ticket.</p><div class="saving-tag">Est. savings: ₹40–60 L/yr · Complexity: Low</div></div></div>
+    <div class="rec-card"><div class="rec-num">3</div><div class="rec-body"><h4>Non-FCM hotel audit & mandatory portal rule</h4><p>Cross-check all non-portal hotel claims against Table 4 city limits. Recover overages. Make portal mandatory for hotel bookings above ₹3,000/night. Out-of-portal claims reimbursed at 80% of eligible limit as policy reminder.</p><div class="saving-tag">Est. savings: ₹40–60 L/yr · Complexity: Low</div></div></div>
+    <div class="rec-card"><div class="rec-num">4</div><div class="rec-body"><h4>BLR-BOM group travel coordination</h4><p>Central Travel Desk sends weekly route-overlap digest for top 5 routes. Employees on same route within 2 days are flagged to coordinate. Policy already mandates Central Desk for 9+ persons — just need detection.</p><div class="saving-tag">Est. savings: ₹20–35 L/yr · Complexity: Low</div></div></div>
+
+    <div class="section-hdr">Phase 2 — Medium-term (months 3–6)</div>
+    <div class="rec-card"><div class="rec-num">5</div><div class="rec-body"><h4>Route-based fare baselines & budget alerts</h4><p>Calculate 25th-percentile fare for each of the top 20 routes from FCM data. Portal alerts when selected fare exceeds baseline by 20%. Updated quarterly. Converts this dashboard's route data into a live control tool.</p><div class="saving-tag">Est. savings: ₹40–60 L/yr · Complexity: Medium</div></div></div>
+    <div class="rec-card"><div class="rec-num">6</div><div class="rec-body"><h4>30-day repeat-visit approval escalation</h4><p>Same employee to same city within 30 days triggers one level higher approval than standard. Forces manager to actively justify every trip. Reduces habit travel without blocking legitimate business needs.</p><div class="saving-tag">Est. savings: ₹15–30 L/yr · Complexity: Low</div></div></div>
+    <div class="rec-card"><div class="rec-num">7</div><div class="rec-body"><h4>Boarding limit compliance tracker</h4><p>Monthly report mapping each employee's boarding claims vs their level entitlement (₹750–₹2,000/day per policy Table 5). Share with cost owners quarterly. Awareness alone reduces over-claiming by 8–12%.</p><div class="saving-tag">Est. savings: ₹10–20 L/yr · Complexity: Low</div></div></div>
+    <div class="rec-card"><div class="rec-num">8</div><div class="rec-body"><h4>Cost owner accountability dashboard</h4><p>Convert this analysis into a live monthly report shared with each cost owner showing their spend per trip vs company average. No targets initially — data visibility alone shifts behaviour. Set targets in month 3.</p><div class="saving-tag">Est. savings: ₹20–30 L/yr through accountability · Complexity: Low</div></div></div>
+
+    <div class="section-hdr">Implementation roadmap</div>
+    <div class="card">
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="when">Week 1</div><h4>Finance / Admin</h4><p>Pull Non-FCM hotel data. Compare against Table 4 city limits. Flag all overages for recovery.</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="when">Week 2</div><h4>IT / Travel Portal</h4><p>Add advance booking block for air tickets under 5 days. Configure airline preference alert for Air India on IndiGo routes.</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="when">Week 2</div><h4>Central Travel Desk</h4><p>Set up weekly route-overlap email digest for top 5 routes (BLR-BOM, BLR-CCU, BLR-DEL, CCU-BLR, DEL-BLR).</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="when">Week 3</div><h4>All cost owners</h4><p>Share personalised spend report vs company average. No targets yet — just data transparency to trigger self-correction.</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="when">Month 2</div><h4>Travel Portal Team</h4><p>Configure portal to show lowest-cost airline first. Add premium-selection alert pop-up.</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="when">Month 3</div><h4>Finance team</h4><p>Build route-baseline model from FCM data. Set quarterly review cycle. Go live with fare alert system.</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="when">Month 6</div><h4>Review</h4><p>Measure savings realised vs estimates. Adjust targets. Present results to management.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 7: SIMULATOR -->
+  <div class="view" id="v7">
+    <div class="metrics">
+      <div class="metric"><div class="metric-lbl">Current annual spend</div><div class="metric-val">₹8.35 Cr</div><div class="metric-sub">Baseline FY 25-26</div></div>
+      <div class="metric"><div class="metric-lbl">Projected savings</div><div class="metric-val grn" id="sim-saving">₹0</div><div class="metric-sub">Based on levers below</div></div>
+      <div class="metric"><div class="metric-lbl">New spend target</div><div class="metric-val" id="sim-target">₹8.35 Cr</div><div class="metric-sub">After interventions</div></div>
+      <div class="metric"><div class="metric-lbl">Reduction %</div><div class="metric-val grn" id="sim-pct">0%</div><div class="metric-sub">vs current baseline</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Savings lever simulator — adjust each intervention</div>
+
+      <div style="margin-bottom:1.5rem">
+        <div style="font-size:12px;font-weight:500;margin-bottom:0.5rem">Advance booking compliance rate <span id="lbl-adv" style="color:#1E2761">50%</span></div>
+        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Current: ~40% of tickets booked 7+ days ahead. Each 10% improvement saves ~₹8L/yr</div>
+        <input type="range" min="40" max="95" value="50" step="5" id="sl-adv" style="width:100%" oninput="updateSim()">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt3)"><span>40% (current)</span><span>95% (target)</span></div>
+      </div>
+
+      <div style="margin-bottom:1.5rem">
+        <div style="font-size:12px;font-weight:500;margin-bottom:0.5rem">Air India → IndiGo switch rate <span id="lbl-ai" style="color:#1E2761">0%</span></div>
+        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Currently 23% of trips on AI. Each 10% switch to IndiGo (on applicable routes) saves ~₹6L/yr</div>
+        <input type="range" min="0" max="80" value="0" step="10" id="sl-ai" style="width:100%" oninput="updateSim()">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt3)"><span>0% switched</span><span>80% switched</span></div>
+      </div>
+
+      <div style="margin-bottom:1.5rem">
+        <div style="font-size:12px;font-weight:500;margin-bottom:0.5rem">Non-FCM hotel claims brought to portal <span id="lbl-hotel" style="color:#1E2761">0%</span></div>
+        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Each 20% of non-portal hotel spend migrated to portal saves ~₹10L in over-limit recovery</div>
+        <input type="range" min="0" max="100" value="0" step="20" id="sl-hotel" style="width:100%" oninput="updateSim()">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt3)"><span>0% migrated</span><span>100% migrated</span></div>
+      </div>
+
+      <div style="margin-bottom:1.5rem">
+        <div style="font-size:12px;font-weight:500;margin-bottom:0.5rem">Group booking utilisation on BLR-BOM <span id="lbl-grp" style="color:#1E2761">0%</span></div>
+        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Each 10% of BLR-BOM trips consolidated into groups saves ~₹2.5L/yr via group discounts</div>
+        <input type="range" min="0" max="50" value="0" step="10" id="sl-grp" style="width:100%" oninput="updateSim()">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt3)"><span>0% grouped</span><span>50% grouped</span></div>
+      </div>
+
+      <div style="margin-bottom:1rem">
+        <div style="font-size:12px;font-weight:500;margin-bottom:0.5rem">Repeat-visit reduction (30-day rule) <span id="lbl-rep" style="color:#1E2761">0%</span></div>
+        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Each 10% reduction in repeat-visits saves ~₹3L/yr in avoidable trip costs</div>
+        <input type="range" min="0" max="40" value="0" step="10" id="sl-rep" style="width:100%" oninput="updateSim()">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt3)"><span>0% reduced</span><span>40% reduced</span></div>
+      </div>
+
+      <div style="padding:1rem;background:var(--bg2);border-radius:var(--r);margin-top:1rem">
+        <div style="font-size:12px;color:var(--txt2);margin-bottom:0.5rem">Savings breakdown</div>
+        <div id="sim-breakdown" style="font-size:12px;display:flex;flex-direction:column;gap:4px"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Projected spend after interventions</div>
+      <div class="chart-wrap" style="height:200px"><canvas id="c7a" role="img" aria-label="Bar chart comparing current and projected spend">Spend comparison chart</canvas></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const TOTAL=83515268,BOARD=46983469,TICKET=36531798;
+
+function switchTab(i){
+  document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',i===j));
+  document.querySelectorAll('.view').forEach((v,j)=>v.classList.toggle('show',i===j));
+}
+
+const owners=[
+  {n:'Mr.Jayadeep Reddy',b:8798075,t:7911421},
+  {n:'Mr.Arivazhagan M',b:9775600,t:6329474},
+  {n:'Mr.Panneerselvam',b:7245833,t:5361943},
+  {n:'Mr.Selvarajan',b:5000691,t:2989312},
+  {n:'Mr.Manimaran',b:2471319,t:1582893},
+  {n:'Mr.Sakthivel',b:2043299,t:1703128},
+  {n:'Mr.Raghothaman',b:1880600,t:1637629},
+  {n:'Mr.Dominic George',b:1681026,t:1427947},
+  {n:'Mr.Seenivasagam',b:1729520,t:1224124},
+  {n:'Mr.Sharad',b:739075,t:1223655},
+  {n:'Mr.Gnanavel T',b:876705,t:747812},
+  {n:'Mr.Akash Dutta',b:773025,t:849831},
+  {n:'Mr.Rajavedivelan',b:766558,t:638687},
+  {n:'Mr.Sivakumar K',b:586013,t:699763},
+  {n:'Mr.Anikesh Nandy',b:456132,t:551060},
+];
+
+const routes=[
+  {s:'BLR-BOM',cnt:441,ig:6277,ai:6730,aic:377},
+  {s:'BOM-BLR',cnt:425,ig:6116,ai:6776,aic:313},
+  {s:'BLR-CCU',cnt:107,ig:7897,ai:0,aic:0},
+  {s:'BLR-DEL',cnt:94,ig:7588,ai:8424,aic:91},
+  {s:'CCU-BLR',cnt:91,ig:7742,ai:0,aic:0},
+  {s:'DEL-BLR',cnt:85,ig:7397,ai:10142,aic:55},
+  {s:'BLR-BEK',cnt:49,ig:8804,ai:0,aic:0},
+  {s:'BLR-UDR',cnt:47,ig:7500,ai:0,aic:0},
+  {s:'JAI-BLR',cnt:45,ig:7986,ai:0,aic:0},
+  {s:'STV-BLR',cnt:49,ig:6291,ai:0,aic:0},
+  {s:'BLR-JAI',cnt:39,ig:7986,ai:0,aic:0},
+  {s:'AMD-BLR',cnt:38,ig:7200,ai:0,aic:0},
+  {s:'BLR-AMD',cnt:24,ig:7200,ai:0,aic:0},
+  {s:'CCU-BOM',cnt:32,ig:7800,ai:0,aic:0},
+  {s:'BOM-CCU',cnt:41,ig:7800,ai:0,aic:0},
+];
+
+const monthly=[
+  {m:'Apr 25',v:3307645},{m:'May 25',v:3110817},{m:'Jun 25',v:2846103},
+  {m:'Jul 25',v:3731626},{m:'Aug 25',v:1920074},{m:'Sep 25',v:2735430},
+  {m:'Oct 25',v:4757118},{m:'Nov 25',v:3940632},{m:'Dec 25',v:6435014},
+  {m:'Jan 26',v:3935617},{m:'Feb 26',v:2204767},{m:'Mar 26',v:807215},
+];
+
+window.charts={};
+function mk(id,cfg){
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(window.charts[id])window.charts[id].destroy();
+  window.charts[id]=new Chart(el,cfg);
+}
+
+function initCharts(){
+  mk('c0a',{type:'doughnut',data:{labels:['Boarding ₹4.70 Cr','Tickets ₹3.65 Cr'],datasets:[{data:[46983469,36531798],backgroundColor:['#1E2761','#C9A84C'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+
+  const top5=owners.slice(0,5);
+  mk('c0b',{type:'bar',data:{labels:top5.map(o=>o.n.replace('Mr.','')),datasets:[{label:'₹ Cr',data:top5.map(o=>+((o.b+o.t)/1e7).toFixed(2)),backgroundColor:'#1E2761',barPercentage:0.7}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{callback:v=>'₹'+v+'Cr'}},y:{grid:{display:false}}}}});
+
+  mk('c1a',{type:'bar',data:{labels:owners.map(o=>o.n.replace('Mr.','').replace('M','').trim()),datasets:[{label:'Boarding',data:owners.map(o=>+(o.b/1e5).toFixed(1)),backgroundColor:'#1E2761'},{label:'Tickets',data:owners.map(o=>+(o.t/1e5).toFixed(1)),backgroundColor:'#C9A84C'}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,ticks:{callback:v=>'₹'+v+'L'},grid:{color:'rgba(0,0,0,0.04)'}},y:{stacked:true,grid:{display:false},ticks:{font:{size:10}}}}}});
+
+  const ratioSec=document.getElementById('ratio-section');
+  const maxTotal=owners[0].b+owners[0].t;
+  ratioSec.innerHTML=owners.map(o=>{
+    const ratio=Math.round(o.b/(o.b+o.t)*100);
+    return `<div class="prog-row"><div class="prog-label">${o.n.replace('Mr.','')}</div><div class="prog-bar"><div class="prog-fill" style="width:${ratio}%;background:${ratio>60?'#C9A84C':'#1E2761'}"></div></div><div class="prog-val">${ratio}% boarding</div></div>`;
+  }).join('');
+
+  mk('c2a',{type:'bar',data:{labels:routes.slice(0,15).map(r=>r.s),datasets:[{label:'Trips',data:routes.slice(0,15).map(r=>r.cnt),backgroundColor:'#1E2761',barPercentage:0.7}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,0,0,0.05)'}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+
+  const routesWithAI=routes.filter(r=>r.ai>0);
+  mk('c2b',{type:'bar',data:{labels:routesWithAI.map(r=>r.s),datasets:[{label:'IndiGo avg',data:routesWithAI.map(r=>r.ig),backgroundColor:'#1E2761'},{label:'Air India avg',data:routesWithAI.map(r=>r.ai),backgroundColor:'#C9A84C'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>'₹'+v.toLocaleString('en-IN')},grid:{color:'rgba(0,0,0,0.05)'}}}}});
+
+  const routeTbl=document.getElementById('route-tbl');
+  routeTbl.innerHTML=routes.filter(r=>r.ai>0).map(r=>{
+    const prem=r.ai-r.ig;
+    const saving=prem*r.aic;
+    return `<tr><td><strong>${r.s}</strong></td><td>${r.cnt}</td><td>₹${r.ig.toLocaleString('en-IN')}</td><td>₹${r.ai.toLocaleString('en-IN')}</td><td class="${prem>0?'':'grn'}">₹${Math.abs(prem).toLocaleString('en-IN')} ${prem>0?'⚠':'✓'}</td><td>${r.aic}</td><td>${saving>0?'<span class="pill grn">₹'+Math.round(saving/100000*10)/10+' L</span>':'<span class="pill info">No saving</span>'}</td></tr>`;
+  }).join('');
+
+  mk('c3a',{type:'pie',data:{labels:['IndiGo','Air India','AI Express','Akasa','Others'],datasets:[{data:[3086,1198,412,125,439],backgroundColor:['#1E2761','#C9A84C','#639922','#BA7517','#888780'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+
+  mk('c3b',{type:'bar',data:{labels:['IndiGo','Akasa Air','Air India','SpiceJet'],datasets:[{label:'Avg ticket ₹',data:[8556,7800,7287,15000],backgroundColor:['#1E2761','#639922','#C9A84C','#E24B4A']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>'₹'+v.toLocaleString('en-IN')},grid:{color:'rgba(0,0,0,0.05)'}}}}});
+
+  mk('c4a',{type:'line',data:{labels:monthly.map(m=>m.m),datasets:[{label:'₹ Lakhs',data:monthly.map(m=>+(m.v/1e5).toFixed(1)),borderColor:'#1E2761',backgroundColor:'rgba(30,39,97,0.08)',tension:0.4,fill:true,pointRadius:4,pointBackgroundColor:'#1E2761'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{ticks:{callback:v=>'₹'+v+'L'},grid:{color:'rgba(0,0,0,0.05)'}}}}});
+
+  const q=[monthly.slice(0,3),monthly.slice(3,6),monthly.slice(6,9),monthly.slice(9,12)];
+  mk('c4b',{type:'bar',data:{labels:['Q1 Apr-Jun','Q2 Jul-Sep','Q3 Oct-Dec','Q4 Jan-Mar'],datasets:[{label:'₹ Lakhs',data:q.map(qtr=>+(qtr.reduce((s,m)=>s+m.v,0)/1e5).toFixed(1)),backgroundColor:['#1E2761','#2d3a8c','#C9A84C','#639922']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>'₹'+v+'L'},grid:{color:'rgba(0,0,0,0.05)'}}}}});
+
+  mk('c5a',{type:'bar',data:{labels:['Late booking','Airline switch','Non-portal hotel','Group bypass','Repeat visits'],datasets:[{label:'Min (₹L)',data:[50,40,40,20,15],backgroundColor:'rgba(30,39,97,0.3)'},{label:'Max (₹L)',data:[75,60,60,35,30],backgroundColor:'#1E2761'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{ticks:{callback:v=>'₹'+v+'L'},grid:{color:'rgba(0,0,0,0.05)'}}}}});
+
+  updateSim();
+}
+
+let simChart=null;
+function updateSim(){
+  const adv=+document.getElementById('sl-adv').value;
+  const ai=+document.getElementById('sl-ai').value;
+  const hotel=+document.getElementById('sl-hotel').value;
+  const grp=+document.getElementById('sl-grp').value;
+  const rep=+document.getElementById('sl-rep').value;
+
+  document.getElementById('lbl-adv').textContent=adv+'%';
+  document.getElementById('lbl-ai').textContent=ai+'%';
+  document.getElementById('lbl-hotel').textContent=hotel+'%';
+  document.getElementById('lbl-grp').textContent=grp+'%';
+  document.getElementById('lbl-rep').textContent=rep+'%';
+
+  const s1=(adv-40)/10*800000;
+  const s2=ai/10*600000;
+  const s3=hotel/20*1000000;
+  const s4=grp/10*250000;
+  const s5=rep/10*300000;
+  const total=s1+s2+s3+s4+s5;
+  const newSpend=TOTAL-total;
+  const pct=Math.round(total/TOTAL*100);
+
+  document.getElementById('sim-saving').textContent='₹'+formatCr(total);
+  document.getElementById('sim-target').textContent='₹'+formatCr(newSpend);
+  document.getElementById('sim-pct').textContent=pct+'%';
+
+  const bd=document.getElementById('sim-breakdown');
+  bd.innerHTML=[
+    {lbl:'Advance booking enforcement',v:s1},
+    {lbl:'Airline switch savings',v:s2},
+    {lbl:'Non-portal hotel recovery',v:s3},
+    {lbl:'Group booking savings',v:s4},
+    {lbl:'Repeat-visit reduction',v:s5},
+  ].map(x=>`<div style="display:flex;justify-content:space-between"><span style="color:var(--txt2)">${x.lbl}</span><span style="font-weight:500;color:${x.v>0?'#3B6D11':'var(--txt3)'}">₹${Math.round(x.v/1e5*10)/10} L</span></div>`).join('');
+
+  const el=document.getElementById('c7a');
+  if(!el)return;
+  if(window.charts['c7a'])window.charts['c7a'].destroy();
+  window.charts['c7a']=new Chart(el,{type:'bar',data:{labels:['Current spend','Projected spend'],datasets:[{label:'₹ Cr',data:[+(TOTAL/1e7).toFixed(2),+(newSpend/1e7).toFixed(2)],backgroundColor:['#C9A84C','#1E2761'],barPercentage:0.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>'₹'+v+'Cr'},grid:{color:'rgba(0,0,0,0.05)'},min:0,max:10}}}});
+}
+
+function formatCr(v){
+  if(v>=1e7)return (v/1e7).toFixed(2)+' Cr';
+  return (v/1e5).toFixed(1)+' L';
+}
+
+document.addEventListener('DOMContentLoaded',initCharts);
+setTimeout(initCharts,300);
+</script>
